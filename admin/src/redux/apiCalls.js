@@ -15,6 +15,8 @@ import {
   addProductSuccess,
 } from "./productRedux";
 
+import {loginStart, loginSuccess, loginFailure} from "./userRedux"
+
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
@@ -24,6 +26,9 @@ export const login = async (dispatch, user) => {
     dispatch(loginFailure());
   }
 };
+export const getUsers = async (dispatch) => {
+  dispatch(get)
+}
 
 export const getProducts = async (dispatch) => {
   dispatch(getProductStart());

@@ -6,7 +6,11 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function UserList() {
-  const [data, setData] = useState(userRows);
+  //const [data, setData] = useState(userRows);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.product.products);
+
+
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
