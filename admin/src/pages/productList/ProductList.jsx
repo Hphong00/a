@@ -4,7 +4,7 @@ import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, getProducts } from "../../redux/apiCalls";
+import { deleteProduct, getProducts, updateProduct } from "../../redux/apiCalls";
 
 export default function ProductList() {
   const dispatch = useDispatch();
@@ -17,6 +17,12 @@ export default function ProductList() {
   const handleDelete = (id) => {
     deleteProduct(id, dispatch);
   };
+
+  const hanldeUpdate = (id) => {
+    updateProduct(id, dispatch)
+  }
+
+  //const handleAdd = () 
 
   const columns = [
     { field: "_id", headerName: "ID", width: 220 },
@@ -53,6 +59,7 @@ export default function ProductList() {
               className="productListDelete"
               onClick={() => handleDelete(params.row._id)}
             />
+            
           </>
         );
       },

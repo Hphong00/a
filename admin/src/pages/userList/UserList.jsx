@@ -1,12 +1,12 @@
 import "./userList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { userRows } from "../../dummyData";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { useEffect } from "react";
 import { getUsers } from "../../redux/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteUser } from "../../redux/apiCalls";
+
 export default function UserList() {
 
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ export default function UserList() {
   }, [dispatch]);
 
   const handleDelete = (id) => {
+    deleteUser(id, dispatch);
     //setData(users.filter((item) => item.id !== id));
   };
   
@@ -24,7 +25,7 @@ export default function UserList() {
     { field: "_id", headerName: "ID", width: 200 },
     {
       field: "username",
-      headerName: "User",
+      headerName: "User Name",
       width: 150,
       renderCell: (params) => {
         return (
@@ -35,9 +36,11 @@ export default function UserList() {
       },
     },
     { field: "email", headerName: "Email", width: 200 },
+    { field: "createdAt", headerName: "Thời gian tạo", width: 200 },
+    { field: "updatedAt", headerName: "Sửa gần nhất", width: 200 },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Hành động",
       width: 150,
       renderCell: (params) => {
         return (

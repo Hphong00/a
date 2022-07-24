@@ -8,13 +8,13 @@ const {
 const router = require("express").Router();
 
 //CREATE
-router.post("/", verifyTokenAndAdmin, productCtrl.createProduct)
+router.post("/", /*verifyTokenAndAdmin,*/ productCtrl.createProduct)
 
 //UPDATE
 router.put("/:id", /*verifyTokenAndAdmin,*/ productCtrl.updateProduct)
 
 //DELETE
-router.delete("/:id", verifyTokenAndAdmin, productCtrl.deleteProduct)
+router.delete("/:id",/* verifyTokenAndAdmin,*/ productCtrl.deleteProduct)
 
 //GET PRODUCT
 router.get("/find/:id", productCtrl.getProduct)

@@ -14,14 +14,15 @@ import ProductList from "./pages/productList/ProductList";
 import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
-// import { useSelector } from "react-redux";
+import OrderList from "./pages/ordersList/OrderList";
+import { useSelector } from "react-redux";
 
 function App() {
-  const admin = true//useSelector((state) => state.user.currentUser.isAdmin);
+  const admin = useSelector((state) => state.user.currentUser.isAdmin);
   return (
     <Router>
       <Switch>
-        <Route path="/login">
+        <Route exact path="/login">
           <Login />
         </Route>
         {admin && (
@@ -49,6 +50,9 @@ function App() {
               </Route>
               <Route path="/newproduct">
                 <NewProduct />
+              </Route>
+              <Route path="/orders">
+                <OrderList />
               </Route>
             </div>
           </>
