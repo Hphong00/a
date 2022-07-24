@@ -59,9 +59,9 @@ const TopText = styled.span`
   border-radius: 6px;
 `;
 const deleteCart = styled.span`
-text-decoration: underline;
-cursor: pointer;
-`
+  text-decoration: underline;
+  cursor: pointer;
+`;
 
 const Bottom = styled.div`
   display: flex;
@@ -217,9 +217,10 @@ const Cart = () => {
   };
   const deleteAll = () => {
     dispatch(remove(cart));
-    navigate("/")
+    alert("Xóa giỏ hàng thành công");
+    navigate("/");
   };
-  
+
   const clickPay = () => {
     if (user.currentUser == null) {
       alert("Mời đăng nhập tài khoản trước khi thanh");
@@ -274,7 +275,13 @@ const Cart = () => {
                   </Details>
                 </ProductDetail>
                 <PriceDetail>
-                <Clear style={{margin: "0px 0px 36px 160px", textDecoration: "auto" }} onClick={() => clickEvent(product)} />
+                  <Clear
+                    style={{
+                      margin: "0px 0px 36px 160px",
+                      textDecoration: "auto",
+                    }}
+                    onClick={() => clickEvent(product)}
+                  />
                   <ProductAmountContainer>
                     <ProductAmount>{product.quantity}</ProductAmount>
                   </ProductAmountContainer>
@@ -313,7 +320,8 @@ const Cart = () => {
               token={onToken}
               stripeKey={KEY}
             >
-              <Button style={{borderRadius: "6px"}}
+              <Button
+                style={{ borderRadius: "6px" }}
                 onClick={
                   clickPay
                 } /*onClick={handleClick} onClick={clickEvent}*/

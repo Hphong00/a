@@ -98,11 +98,16 @@ const Item = styled.div`
 const Navbar = () => {
   const quantity = useSelector((state) => state.cart.quantity);
   let navigate = useNavigate();
+  const isLoggedIn = true;
   //logout
   const logout = () => {
+    const info = JSON.parse(localStorage.getItem('persist:root'));
+    const userInfo = JSON.parse(info.user)
+    const username = userInfo.currentUser.username;
+    console.log("logout " +username);  
     logoutUser();
-    navigate("/products/apple")
-  };
+};
+  
 
   // search // vẫn hiện khi không tìm kiếm
   const [query, setQuery] = useState("search");
@@ -146,7 +151,7 @@ const Navbar = () => {
             />
           </MenuItem>
           <Item>|</Item>
-          <MenuItem>
+         <MenuItem>
             <Link
               to="/register"
               style={{ color: "black", textDecoration: "auto" }}

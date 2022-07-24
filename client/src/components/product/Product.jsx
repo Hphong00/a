@@ -209,7 +209,7 @@ const Product = ({ item }) => {
         to={`/product/${item._id}`}
         style={{ color: "black", textDecoration: "auto" }}
       >
-        <Sale >{item.sale}</Sale>
+        <Sale>{item.sale}</Sale>
         <Sale1>{item.sale1}</Sale1>
         <NameP>{item.title}</NameP>
         <Price>{item.pricefake}</Price>

@@ -1,8 +1,21 @@
 import { loginFailure, loginStart, loginSuccess, logout } from "./userRedux";
 import { publicRequest } from "../requestMethods";
 import { createContext } from "react";
-
-export const AuthContext = createContext()
+import {
+  getProductFailure,
+  getProductStart,
+  getProductSuccess,
+  deleteProductFailure,
+  deleteProductStart,
+  deleteProductSuccess,
+  updateProductFailure,
+  updateProductStart,
+  updateProductSuccess,
+  addProductFailure,
+  addProductStart,
+  addProductSuccess,
+} from "./productRedux";
+export const AuthContext = createContext();
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
@@ -21,9 +34,27 @@ export const register = async (dispatch, user) => {
   } catch (err) {
     dispatch(loginFailure());
   }
-}
-//LOGOUT...
-export const logoutUser = async (dispatch) =>{
-  localStorage.removeItem('persist:root')
-  dispatch(logout())
-}
+};
+export const logoutUser = async () => {
+  localStorage.removeItem("persist:root");
+};
+//products
+export const updateProduct = async (id, product, dispatch) => {
+  dispatch(updateProductStart());
+  try {
+    // update
+    dispatch(updateProductSuccess({ id, product }));
+  } catch (err) {
+    dispatch(updateProductFailure());
+  }
+};
+
+export const getProducts = async (dispatch) => {
+  dispatch(getProductStart());
+  try {
+    const res = await publicRequest.get("/products");
+    dispatch(getProductSuccess(res.data));
+  } catch (err) {
+    dispatch(getProductFailure());
+  }
+};

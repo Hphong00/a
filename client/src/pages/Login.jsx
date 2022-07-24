@@ -145,7 +145,7 @@ const Login = () => {
           </ButtonLogin>
           {error && <Error>Something went wrong...</Error>}
           <Link style={{ textDecoration: "auto" }}>Forgotten password?</Link>
-          <ButtonRegister>Create new Account</ButtonRegister>
+          <ButtonRegister >Create new Account</ButtonRegister>
         </Form>
       </Wrapper>
     </Container>

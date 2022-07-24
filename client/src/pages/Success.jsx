@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import { userRequest } from "../requestMethods";
+import { userRequest,productRequest } from "../requestMethods";
 import { Link } from "react-router-dom";
 import { remove } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
@@ -32,6 +32,20 @@ const Success = () => {
         setOrderId(res.data._id);
       } catch {}
     };
+    // const editProduct = async () => {
+    //   try {
+    //     const res = await productRequest.put("/products", {
+    //       userId: currentUser._id,
+    //       products: products.products.map((item) => ({
+    //         productId: item._id,
+    //         quantity: item._quantity,
+    //       })),
+    //       amount: products.total,
+    //       address: data.billing_details.address,
+    //     });
+    //     setOrderId(res.data._id);
+    //   } catch {}
+    // };
     data && createOrder();
   }, [products, data, currentUser]);
   console.log(location);

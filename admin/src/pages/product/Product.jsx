@@ -38,9 +38,9 @@ export default function Product() {
     const getStats = async () => {
       try {
         const res = await userRequest.get("orders/income?pid=" + productId);
-        const list = res.data.sort((a,b)=>{
-            return a._id - b._id
-        })
+        const list = res.data.sort((a, b) => {
+          return a._id - b._id;
+        });
         list.map((item) =>
           setPStats((prev) => [
             ...prev,
@@ -76,14 +76,6 @@ export default function Product() {
               <span className="productInfoKey">id:</span>
               <span className="productInfoValue">{product._id}</span>
             </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">sales:</span>
-              <span className="productInfoValue">5123</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">in stock:</span>
-              <span className="productInfoValue">{product.inStock}</span>
-            </div>
           </div>
         </div>
       </div>
@@ -96,11 +88,8 @@ export default function Product() {
             <input type="text" placeholder={product.desc} />
             <label>Price</label>
             <input type="text" placeholder={product.price} />
-            <label>In Stock</label>
-            <select name="inStock" id="idStock">
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
+            <label>Sale</label>
+            <input type="text" placeholder={product.sale1} />
           </div>
           <div className="productFormRight">
             <div className="productUpload">

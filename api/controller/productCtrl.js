@@ -16,6 +16,27 @@ const productCtrl = {
         }
     },
 
+    //update create
+    update: async(req, res) => {
+        try {
+            const newP = new Product(req.body);
+            const updatedPro = await User.findByIdAndUpdate(
+                req.params.id, {
+                    $set: req.body,
+                }, { new: true }
+            );
+            res.status(200).json(updatedPro);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+        try {
+            const savedProduct = await newProduct.save();
+            res.status(200).json(savedProduct);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
     //Update 
     updateProduct: async(req, res) => {
         try {
