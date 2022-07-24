@@ -18,11 +18,11 @@ import Login from "./pages/login/Login";
 import { useSelector } from "react-redux";
 
 function App() {
-  const admin = true//useSelector((state) => state.user.currentUser.isAdmin);
+  const admin = useSelector((state) => state.user.currentUser.isAdmin);
   return (
     <Router>
       <Switch>
-        <Route path="/login">
+        <Route exact path="/login">
           <Login />
         </Route>
         {admin && (
