@@ -7,6 +7,8 @@ import { useEffect, useMemo, useState } from "react";
 import { userRequest } from "../../requestMethods";
 import { useDispatch } from "react-redux";
 import { updateProduct } from "../../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Product() {
   const location = useLocation();
@@ -28,9 +30,15 @@ export default function Product() {
     e.preventDefault();
     const product = {...inputs };
     updateProduct(productId, product, dispatch);
-    console.log(productId);
-    console.log(product);
-    //console.log(dispatch);
+    toast.success("Cập nhật thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const MONTHS = useMemo(
@@ -207,6 +215,7 @@ export default function Product() {
             <button onClick={changeProduct} className="productButton">
               Update
             </button>
+            <ToastContainer />
           </div>
         </form>
       </div>

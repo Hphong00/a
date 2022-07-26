@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { getUsers } from "../../redux/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UserList() {
 
@@ -18,7 +20,15 @@ export default function UserList() {
 
   const handleDelete = (id) => {
     deleteUser(id, dispatch);
-    //setData(users.filter((item) => item.id !== id));
+    toast.success("Xóa thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
   
   const columns = [
@@ -52,6 +62,7 @@ export default function UserList() {
               className="userListDelete"
               onClick={() => handleDelete(params.row._id)}
             />
+            <ToastContainer />
           </>
         );
       },

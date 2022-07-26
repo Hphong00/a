@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, getProducts, updateProduct } from "../../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ProductList() {
   const dispatch = useDispatch();
@@ -16,6 +18,15 @@ export default function ProductList() {
 
   const handleDelete = (id) => {
     deleteProduct(id, dispatch);
+    toast.success("Xóa thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const hanldeUpdate = (id) => {
@@ -59,7 +70,7 @@ export default function ProductList() {
               className="productListDelete"
               onClick={() => handleDelete(params.row._id)}
             />
-            
+             <ToastContainer />
           </>
         );
       },

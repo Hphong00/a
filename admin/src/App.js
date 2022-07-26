@@ -15,6 +15,7 @@ import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
 import OrderList from "./pages/ordersList/OrderList";
+import Order from "./pages/order/Order";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -53,6 +54,9 @@ function App() {
               </Route>
               <Route path="/orders">
                 <OrderList />
+              </Route>
+              <Route path="/order/:orderId">
+                <Order />
               </Route>
             </div>
           </>

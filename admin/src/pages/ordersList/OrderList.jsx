@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {deleteOrder, getOders } from "../../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function OrderList() {
   const dispatch = useDispatch();
@@ -15,6 +17,15 @@ export default function OrderList() {
 
   const handleDelete = (id) => {
     deleteOrder(id, dispatch);
+    toast.success("Xóa thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const columns = [
@@ -54,7 +65,7 @@ export default function OrderList() {
               className="orderListDelete"
               onClick={() => handleDelete(params.row._id)}
             />
-            
+            <ToastContainer />
           </>
         );
       },

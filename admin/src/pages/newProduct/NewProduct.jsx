@@ -9,6 +9,8 @@ import {
 import app from "../../firebase";
 import { addProduct } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
@@ -48,11 +50,30 @@ export default function NewProduct() {
         }
       },
       (error) => {
+        console.log(error);
+        toast.error("Đăng ký thất bại", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           const product = { ...inputs, img: downloadURL, categories: cat };
           addProduct(product, dispatch);
+          toast.success("Đăng ký thành công", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         });
       }
     );
@@ -113,8 +134,8 @@ export default function NewProduct() {
         <button onClick={handleClick} className="addProductButton">
           Create
         </button>
+        <ToastContainer />
       </form>
     </div>
-    
   );
 }
