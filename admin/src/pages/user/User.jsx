@@ -6,10 +6,10 @@ import {
   PhoneAndroid,
   Publish,
 } from "@material-ui/icons";
+import {format} from "timeago.js"
 import { Link, useLocation } from "react-router-dom";
 import "./user.css";
 import { useSelector } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
 export default function User() {
   const location = useLocation();
   const userId = location.pathname.split("/")[2];
@@ -45,7 +45,7 @@ export default function User() {
             </div>
             <div className="userShowInfo">
               <CalendarToday className="userShowIcon" />
-              <span className="userShowInfoTitle">{user.createdAt}</span>
+              <span className="userShowInfoTitle">{format(user.createdAt)}</span>
             </div>
             <span className="userShowTitle">Chi tiết liên hệ</span>
             <div className="userShowInfo">

@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 export default function NewUser() {
+  var checkError;
   const [inputs, setInputs] = useState({});
   const dispatch = useDispatch();
   const handleChange = (e) => {
@@ -14,20 +14,46 @@ export default function NewUser() {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
-  
+
   const handleClick = (e) => {
     e.preventDefault();
     const user = { ...inputs };
     addUser(user, dispatch)
-    toast.success("Đăng ký thành công", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+      .catch((e) => {
+        if (e.code === "ERR_BAD_RESPONSE") {
+          checkError = true;
+        } else {
+          checkError = false;
+        }
+      })
+      .finally(() => {
+        showToast(checkError);
+      });
+  };
+
+  const showToast = (checkError) => {
+    if (checkError) {
+      toast.error("Đăng ký không thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    if (!checkError) {
+      toast.success("Đăng ký thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   return (

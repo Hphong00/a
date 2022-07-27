@@ -8,41 +8,56 @@ import Success from "./pages/Success";
 
 import {
   BrowserRouter as Router,
-  Routes ,
+  Routes,
   Route,
-  Navigate
-
-  
+  Navigate,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Orders from "./pages/OrderList";
+import ForgotPassword from "./pages/Forgot-password";
+import User from "./pages/User";
+
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
-
-  //const user = false
   return (
     <Router>
-        <Routes>
-          <Route exact path="/" element={< Home/>}/>
-        </Routes>
-        <Routes>
-          <Route exact path="/products/:category" element={<ProductList e/>}/>
-        </Routes>
-        <Routes>
-          <Route exact path="/product/:id" element={<Product  e/>}/>
-        </Routes>
-        <Routes>
-          <Route exact path="/cart" element={<Cart   e/>}/>
-        </Routes>
-        <Routes>
-          <Route exact path="/success" element={<Success   e/>}/>
-        </Routes>
-        <Routes>
-          <Route path="/login" element={user ? <Navigate to ="/" />: <Login e/>}/>
-        </Routes>
-        <Routes>
-          <Route path="/register"  element={user ? <Navigate to ="/" />: <Register   e/>}/>
-        </Routes>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/products/:category" element={<ProductList e />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/product/:id" element={<Product e />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/cart" element={<Cart e />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/success" element={<Success e />} />
+      </Routes>
+      <Routes>
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" /> : <Login e />}
+        />
+      </Routes>
+      <Routes>
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" /> : <Register e />}
+        />
+      </Routes>
+      <Routes>
+        <Route exact path="/orders" element={<Orders e />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/forgot-password" element={<ForgotPassword e />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/users" element={<User e />} />
+      </Routes>
     </Router>
   );
 };

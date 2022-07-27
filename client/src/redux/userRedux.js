@@ -22,10 +22,32 @@ const userSlice = createSlice({
     logout: (state) => {
       state.currentUser = null;
     },
-  },
-    
-  },
-);
 
-export const { loginStart, loginSuccess, loginFailure, logout} = userSlice.actions;
+    // UPDATE PROFILE
+    updateProfileStart: (state) => {
+      state.isFetching = true;
+      state.error = false;
+    },
+    updateProfileSuccess: (state, action) => {
+      state.isFetching = false;
+      // state.users[
+      //   state.products.findIndex((item) => item._id === action.payload.id)
+      // ] = action.payload.product;
+    },
+    updateProfileFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
+    },
+  },
+});
+
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  updateProfileStart,
+  updateProfileSuccess,
+  updateProfileFailure
+} = userSlice.actions;
 export default userSlice.reducer;

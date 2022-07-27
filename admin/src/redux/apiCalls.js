@@ -28,9 +28,9 @@ import{
   getOrderStart,
   getOrderSuccess,
   getOrderFailure,
-  addOrderStart,
-  addOrderSuccess,
-  addOrderFailure,
+  // addOrderStart,
+  // addOrderSuccess,
+  // addOrderFailure,
   deleteOrderStart,
   deleteOrderSuccess,
   deleteOrderFailure,
@@ -60,12 +60,8 @@ export const getUsers = async (dispatch) => {
 
 export const addUser = async (user, dispatch) => {
   dispatch(addUserStart());
-  try {
-    const res = await publicRequest.post(`/auth/register`, user);
-    dispatch(addUserSuccess(res.data));
-  } catch (err) {
-    dispatch(addUserFailure());
-  }
+  const res = await publicRequest.post(`/auth/register`, user)
+  dispatch(addUserSuccess(res.data));
 };
 
 export const deleteUser = async (id, dispatch) => {
@@ -121,12 +117,8 @@ export const updateProduct = async (id, product, dispatch) => {
 
 export const addProduct = async (product, dispatch) => {
   dispatch(addProductStart());
-  try {
-    const res = await userRequest.post(`/products`, product);
-    dispatch(addProductSuccess(res.data));
-  } catch (err) {
-    dispatch(addProductFailure());
-  }
+  const res = await userRequest.post(`/products`, product);
+  dispatch(addProductSuccess(res.data));
 };
 
 //Order

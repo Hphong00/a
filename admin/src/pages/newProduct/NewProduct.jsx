@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function NewProduct() {
+  var checkError;
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState([]);
@@ -29,6 +30,10 @@ export default function NewProduct() {
 
   const handleClick = (e) => {
     e.preventDefault();
+    if(!file){
+      checkError = true;
+      showToast(checkError);
+    }
     const fileName = new Date().getTime() + file.name;
     const storage = getStorage(app);
     const storageRef = ref(storage, fileName);
@@ -50,33 +55,50 @@ export default function NewProduct() {
         }
       },
       (error) => {
-        console.log(error);
-        toast.error("Đăng ký thất bại", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        checkError = true;
+        showToast(checkError);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           const product = { ...inputs, img: downloadURL, categories: cat };
-          addProduct(product, dispatch);
-          toast.success("Đăng ký thành công", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+          addProduct(product, dispatch).catch((e)=>{
+            if (e.code === "ERR_BAD_RESPONSE") {
+              checkError = true;
+            } else {
+              checkError = false;
+            }
+          })
+          .finally(() => {
+            showToast(checkError);
           });
         });
       }
     );
+  };
+
+  const showToast = (checkError) => {
+    if (checkError) {
+      toast.error("Đăng ký không thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    if (!checkError) {
+      toast.success("Đăng ký thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+     }
   };
 
   return (
@@ -137,5 +159,6 @@ export default function NewProduct() {
         <ToastContainer />
       </form>
     </div>
+    
   );
 }

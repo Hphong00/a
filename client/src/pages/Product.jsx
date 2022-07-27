@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { publicRequest } from "../requestMethods";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div``;
 
@@ -150,6 +152,15 @@ const Product = () => {
 
   const handleClick = () => {
     dispatch(addProduct({ ...product, quantity, color, memory }));
+    toast.success("Thêm vào giỏ hàng thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (
@@ -187,6 +198,7 @@ const Product = () => {
               <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
             <Button onClick={handleClick}>Thêm vào giỏ hàng</Button>
+            <ToastContainer />
           </AddContainer>
         </InfoContainer>
       </Wrapper>

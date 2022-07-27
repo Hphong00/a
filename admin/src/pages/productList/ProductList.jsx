@@ -4,7 +4,7 @@ import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, getProducts, updateProduct } from "../../redux/apiCalls";
+import { deleteProduct, getProducts } from "../../redux/apiCalls";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,9 +29,9 @@ export default function ProductList() {
     });
   };
 
-  const hanldeUpdate = (id) => {
-    updateProduct(id, dispatch)
-  }
+  // const hanldeUpdate = (id) => {
+  //   updateProduct(id, dispatch)
+  // }
 
   //const handleAdd = () 
 

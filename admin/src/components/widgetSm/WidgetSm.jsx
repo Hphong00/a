@@ -35,7 +35,7 @@ export default function WidgetSm() {
             </div>
             <button className="widgetSmButton">
               <Visibility className="widgetSmIcon" />
-              Display
+              Chi tiết
             </button>
           </li>
         ))}

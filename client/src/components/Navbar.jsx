@@ -14,7 +14,8 @@ import { Link } from "react-router-dom";
 import { logoutUser } from "../redux/apiCalls";
 import Table from "./TableSearch";
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div`
   height: 50px;
@@ -56,7 +57,6 @@ const SearchContainer = styled.div`
   padding: 0px;
   font-size: 12px;
   border-radius: 6px;
-  
 `;
 
 const Input = styled.input`
@@ -96,20 +96,33 @@ const Item = styled.div`
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 const Navbar = () => {
-  const quantity = useSelector((state) => state.cart.quantity);
-  let navigate = useNavigate();
-  const isLoggedIn = true;
-  //logout
-  const logout = () => {
-    const info = JSON.parse(localStorage.getItem('persist:root'));
-    const userInfo = JSON.parse(info.user)
-    const username = userInfo.currentUser.username;
-    console.log("logout " +username);  
-    logoutUser();
-};
-  
 
-  // search // vẫn hiện khi không tìm kiếm
+  const quantity = useSelector((state) => state.cart.quantity);
+  var isLoggedIn;
+  const info = JSON.parse(localStorage.getItem("persist:root"));
+  const userInfo = JSON.parse(info.user);
+  const checkLogin = userInfo.currentUser;
+
+  if (checkLogin != null) {
+    isLoggedIn = true;
+  } else {
+    isLoggedIn = false;
+  }
+
+  const logout = () => {
+    logoutUser();
+    toast.success("Đăng xuất thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  // search
   const [query, setQuery] = useState("search");
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -121,6 +134,7 @@ const Navbar = () => {
     };
     fetchData();
   }, [query]);
+
   return (
     <Container>
       <Wrapper>
@@ -128,12 +142,11 @@ const Navbar = () => {
           <Language>VN</Language>
           <SearchContainer>
             <Input
-              style={{borderRadius: "6px", fontSize: 18 }}
+              style={{ borderRadius: "6px", fontSize: 18 }}
               className="search"
               placeholder="Search..."
               onChange={(e) => setQuery(e.target.value.toLowerCase())}
             />
-            {/* <Search style={{ color: "black", fontSize: 20 }} /> */}
           </SearchContainer>
         </Left>
         <Center>
@@ -145,27 +158,35 @@ const Navbar = () => {
         </Center>
         <Right>
           <MenuItem>
-            <NotificationsNoneTwoTone
-              fontSize="small"
-              style={{ marginRight: "0px" }}
-            />
-          </MenuItem>
-          <Item>|</Item>
-         <MenuItem>
             <Link
               to="/register"
               style={{ color: "black", textDecoration: "auto" }}
             >
-              ĐĂNG KÝ
+              {isLoggedIn ? "" : " ĐĂNG KÝ"}
             </Link>
           </MenuItem>
-          <Item>|</Item>
           <MenuItem>
             <Link
               to="/login"
               style={{ color: "black", textDecoration: "auto" }}
             >
-              ĐĂNG NHẬP
+              {isLoggedIn ? "" : "ĐĂNG NHẬP"}
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link
+              to="/users"
+              style={{ color: "black", textDecoration: "auto" }}
+            >
+              {isLoggedIn ? "Thông tin cá nhân" : ""}
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link
+              to="/orders"
+              style={{ color: "black", textDecoration: "auto" }}
+            >
+              {isLoggedIn ? "Đơn hàng" : ""}
             </Link>
           </MenuItem>
           <Link to="/cart" style={{ color: "black" }}>
@@ -175,14 +196,11 @@ const Navbar = () => {
               </Badge>
             </MenuItem>
           </Link>
-          <Button onClick={logout}>
-            <Link
-              to="/login"
+          <MenuItem onClick={logout}><Link
+              to="/"
               style={{ color: "black", textDecoration: "auto" }}
-            >
-              OUT
-            </Link>
-          </Button>
+            >{isLoggedIn ? "ĐĂNG XUẤT" : ""}</Link></MenuItem>
+          <ToastContainer />
         </Right>
       </Wrapper>
       <ContainerTable> {<Table data={data} />}</ContainerTable>

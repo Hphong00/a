@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import { remove, removeProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 // import { product } from "../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const KEY =
   "pk_test_51LCNWkBP1LwCA3styoj0vz1MpPtdDsiNixixSrRdD99Ze69uLPFw6l8OWDvpkfvWPuZyyk8ZtxyXFv1WVrvF4ODt006EhGHFjw";
@@ -214,6 +216,15 @@ const Cart = () => {
   // xóa sản phẩm đi
   const clickEvent = (product) => {
     dispatch(removeProduct(product));
+    toast.success('Xóa sản phẩm thành công', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
   };
   const deleteAll = () => {
     dispatch(remove(cart));
@@ -223,11 +234,28 @@ const Cart = () => {
 
   const clickPay = () => {
     if (user.currentUser == null) {
-      alert("Mời đăng nhập tài khoản trước khi thanh");
+      toast.error('Đăng nhập trước khi thanh toán. ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
       //navigate("/login")
     }
     if (cart.products == null) {
-      alert("Giỏ hàng không có hàng");
+      alert("Thêm hàng trước khi thanh toán")
+      toast.error('Giỏ hàng chưa có hàng', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
   };
   return (
@@ -328,6 +356,7 @@ const Cart = () => {
               >
                 Thanh toán luôn
               </Button>
+              <ToastContainer />
             </StripeCheckout>
           </Summary>
         </Bottom>
