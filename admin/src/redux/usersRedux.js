@@ -49,6 +49,22 @@ export const usersSlice = createSlice({
       state.isFetching = false;
       state.error = true;
     },
+     // UPDATE PROFILE
+     updateProfileStart: (state) => {
+      state.isFetching = true;
+      state.error = false;
+    },
+    updateProfileSuccess: (state, action) => {
+      state.isFetching = false;
+      state.users.copyWithin(
+        state.users.findIndex((item) => item._id === action.payload._id),
+        1
+      );
+    },
+    updateProfileFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
+    },
   },
 });
 
@@ -62,6 +78,9 @@ export const {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  updateProfileStart,
+  updateProfileSuccess,
+  updateProfileFailure,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

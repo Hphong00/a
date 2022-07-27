@@ -96,7 +96,6 @@ const Item = styled.div`
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 const Navbar = () => {
-
   const quantity = useSelector((state) => state.cart.quantity);
   var isLoggedIn;
   const info = JSON.parse(localStorage.getItem("persist:root"));
@@ -111,6 +110,7 @@ const Navbar = () => {
 
   const logout = () => {
     logoutUser();
+    window.location.reload();
     toast.success("Đăng xuất thành công", {
       position: "top-right",
       autoClose: 5000,
@@ -189,6 +189,14 @@ const Navbar = () => {
               {isLoggedIn ? "Đơn hàng" : ""}
             </Link>
           </MenuItem>
+          <MenuItem>
+            <Link
+              to="/change-password"
+              style={{ color: "black", textDecoration: "auto" }}
+            >
+              {isLoggedIn ? "Đổi mật khẩu" : ""}
+            </Link>
+          </MenuItem>
           <Link to="/cart" style={{ color: "black" }}>
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
@@ -196,10 +204,11 @@ const Navbar = () => {
               </Badge>
             </MenuItem>
           </Link>
-          <MenuItem onClick={logout}><Link
-              to="/"
-              style={{ color: "black", textDecoration: "auto" }}
-            >{isLoggedIn ? "ĐĂNG XUẤT" : ""}</Link></MenuItem>
+          <MenuItem onClick={logout}>
+            <Link to="/" style={{ color: "black", textDecoration: "auto" }}>
+              {isLoggedIn ? "ĐĂNG XUẤT" : ""}
+            </Link>
+          </MenuItem>
           <ToastContainer />
         </Right>
       </Wrapper>

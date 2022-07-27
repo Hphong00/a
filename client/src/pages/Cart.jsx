@@ -216,20 +216,20 @@ const Cart = () => {
   // xóa sản phẩm đi
   const clickEvent = (product) => {
     dispatch(removeProduct(product));
-    toast.success('Xóa sản phẩm thành công', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      });
+    window.location.reload();
+    // toast.success('Xóa sản phẩm thành công', {
+    //   position: "top-right",
+    //   autoClose: 5000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   });
   };
   const deleteAll = () => {
     dispatch(remove(cart));
-    alert("Xóa giỏ hàng thành công");
-    navigate("/");
+    window.location.reload();
   };
 
   const clickPay = () => {

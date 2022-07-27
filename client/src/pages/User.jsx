@@ -19,26 +19,30 @@ import {
 import app from "../firebase";
 import "../App.css";
 import { format } from "timeago.js";
-import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useSelector,useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {updateProfile} from"../redux/apiCalls"
+import { updateProfile, getUserById } from "../redux/apiCalls";
 
 const Container = styled.div``;
 
 const Wrapper = styled.div``;
 
 const User = () => {
+  var checkError;
+  const [file, setFile] = useState(null);
+  const [inputs, setInputs] = useState({});
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user.currentUser);
   const userId = user._id;
 
+  useEffect(() => {
+    getUserById(userId,dispatch);
+  }, [dispatch]);
+
   // edit
-  var checkError;
-  const profile = new Object();
-  const [inputs, setInputs] = useState({});
-  const dispatch = useDispatch();
   const handleChange = (e) => {
     setInputs((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -47,25 +51,59 @@ const User = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    const profile = { ...inputs};
-    console.log(userId);
-    console.log(profile);
-    updateProfile(userId , profile, dispatch).catch((e) => {
-        if (e.code === "ERR_BAD_RESPONSE") {
-          checkError = true;
-        } else {
-          checkError = false;
+    if (!file) {
+      checkError = true;
+      showToast(checkError);
+    }else{
+    const fileName = new Date().getTime() + file.name;
+    const storage = getStorage(app);
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
         }
-      })
-      .finally(() => {
+      },
+      (error) => {
+        checkError = true;
         showToast(checkError);
-      });
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          const profile = { ...inputs, avata: downloadURL };
+          console.log(userId);
+          console.log(profile);
+          updateProfile(userId, profile, dispatch)
+            .catch((e) => {
+              if (e.code === "ERR_BAD_RESPONSE") {
+                checkError = true;
+              } else {
+                checkError = false;
+              }
+            })
+            .finally(() => {
+              showToast(checkError);
+              // window.location.reload();
+            });
+        });
+      }
+    )};
   };
-
 
   const showToast = (checkError) => {
     if (checkError) {
-      toast.error("Đăng ký không thành công", {
+      toast.error("Thất bại", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -76,7 +114,7 @@ const User = () => {
       });
     }
     if (!checkError) {
-      toast.success("Đăng ký thành công", {
+      toast.success("Thành công", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -100,11 +138,7 @@ const User = () => {
           <div className="userContainer">
             <div className="userShow">
               <div className="userShowTop">
-                <img
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                  className="userShowImg"
-                />
+                <img src={user.profile.avata} alt="" className="userShowImg" />
                 <div className="userShowTopTitle">
                   <span className="userShowUsername">{user.username}</span>
                 </div>
@@ -187,15 +221,22 @@ const User = () => {
                   <div className="userUpdateUpload">
                     <img
                       className="userUpdateImg"
-                      src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                      src={user.profile.avata}
                       alt=""
                     />
                     <label htmlFor="file">
                       <Publish className="userUpdateIcon" />
                     </label>
-                    <input type="file" id="file" style={{ display: "none" }} />
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      style={{ display: "none" }}
+                    />
                   </div>
-                  <button onClick={handleClick} className="userUpdateButton">Update</button>
+                  <button onClick={handleClick} className="userUpdateButton">
+                    Update
+                  </button>
                 </div>
               </form>
             </div>

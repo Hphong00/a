@@ -14,8 +14,9 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Orders from "./pages/OrderList";
-import ForgotPassword from "./pages/Forgot-password";
+import ForgotPassword from "./pages/Forgot-Password";
 import User from "./pages/User";
+import ChangePassword from "./pages/Change-Password";
 
 
 const App = () => {
@@ -57,6 +58,9 @@ const App = () => {
       </Routes>
       <Routes>
         <Route exact path="/users" element={<User e />} />
+      </Routes>
+      <Routes>
+        <Route exact path="/change-password" element={<ChangePassword e />} />
       </Routes>
     </Router>
   );
