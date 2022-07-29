@@ -95,7 +95,7 @@ export default function NewProduct() {
 
   const showToast = (checkError) => {
     if (checkError) {
-      toast.error("Đăng ký không thành công", {
+      toast.error("Tạo sản phẩm không thành công", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -106,7 +106,7 @@ export default function NewProduct() {
       });
     }
     if (!checkError) {
-      toast.success("Đăng ký thành công", {
+      toast.success("Tạo sản phẩm thành công", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
