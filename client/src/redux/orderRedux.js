@@ -20,6 +20,12 @@ export const ordersSlice = createSlice({
       state.isFetching = false;
       state.error = true;
     },
+    // GET ORDER BY USERID
+    getOrderByUserId: (state,id,action) => {
+      state.orders[
+        state.orders.findIndex((item) => item._id === id)
+      ] = action.payload.orders;
+    },
   },
 });
 
@@ -27,6 +33,7 @@ export const {
   getOrderStart,
   getOrderSuccess,
   getOrderFailure,
+  getOrderByUserId,
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

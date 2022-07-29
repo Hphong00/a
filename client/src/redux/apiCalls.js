@@ -17,7 +17,12 @@ import {
   getProductStart,
   getProductSuccess,
 } from "./productRedux";
-import { getOrderStart, getOrderSuccess, getOrderFailure } from "./orderRedux";
+import {
+  getOrderStart,
+  getOrderSuccess,
+  getOrderFailure,
+  getOrderByUserId,
+} from "./orderRedux";
 export const AuthContext = createContext();
 // AUTH
 export const login = async (dispatch, user) => {
@@ -76,6 +81,16 @@ export const getOders = async (dispatch) => {
   try {
     const res = await publicRequest.get("/orders");
     dispatch(getOrderSuccess(res.data));
+  } catch (err) {
+    dispatch(getOrderFailure());
+  }
+};
+
+export const getOdersById = async (id,dispatch) => {
+  dispatch(getOrderStart());
+  try {
+     const res = await publicRequest.get("/orders");
+    dispatch(getOrderByUserId(id,res.data));
   } catch (err) {
     dispatch(getOrderFailure());
   }

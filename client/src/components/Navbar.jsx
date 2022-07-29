@@ -189,14 +189,14 @@ const Navbar = () => {
               {isLoggedIn ? "Đơn hàng" : ""}
             </Link>
           </MenuItem>
-          <MenuItem>
+          {/* <MenuItem>
             <Link
               to="/change-password"
               style={{ color: "black", textDecoration: "auto" }}
             >
               {isLoggedIn ? "Đổi mật khẩu" : ""}
             </Link>
-          </MenuItem>
+          </MenuItem> */}
           <Link to="/cart" style={{ color: "black" }}>
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">

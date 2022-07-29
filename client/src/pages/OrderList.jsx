@@ -5,8 +5,9 @@ import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOders } from "../redux/apiCalls";
+import { Clear,DeleteForever,VisibilityOutlined } from "@material-ui/icons";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { getOders,getOdersById } from "../redux/apiCalls";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -31,6 +32,7 @@ const TopButton = styled.button`
   padding: 10px;
   font-weight: 600;
   cursor: pointer;
+  margin-left: 200px;
   border-radius: 6px;
   border: ${(props) => props.type === "filled" && "none"};
   background-color: ${(props) =>
@@ -71,21 +73,36 @@ const Details = styled.div`
   justify-content: space-around;
 `;
 
-const OrderName = styled.span``;
+const OrderName = styled.span`
+    margin-left: 200px;
+`;
 
 const Hr = styled.hr`
   background-color: #eee;
   border: none;
   height: 1px;
 `;
+const PriceDetail = styled.div`
+  flex: 1;
+  display: flex;
+  margin-right: 100px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 
 const Orders = () => {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.order.orders);
   useEffect(() => {
     getOders(dispatch);
   }, [dispatch]);
-  const order = useSelector((state) => state.order);
+  const user = useSelector((state) => state.user.currentUser);
+  const userId = user._id;
+  const getOrderById = useSelector(state => state.order.orders)
+  const order = getOrderById.filter(orderid => orderid.userId === userId);
+  const deleteAll = () => {
+  };
 
   return (
     <Container>
@@ -103,7 +120,7 @@ const Orders = () => {
         </Top>
         <Bottom>
           <Info>
-            {order.orders.map((order) => (
+            {order.map((order) => (
               <Order>
                 <OrderDetail>
                   <Details>
@@ -120,8 +137,27 @@ const Orders = () => {
                       <b>Địa chỉ nhận hàng:</b> {order.address.line1},{" "}
                       {order.address.city}, {order.address.country}
                     </OrderName>
+                    <OrderName>
+                      <b>Trạng thái đơn hàng:</b> {order.status}
+                    </OrderName>
                   </Details>
                 </OrderDetail>
+                <PriceDetail>
+                  <DeleteForever
+                    style={{
+                      margin: "0px 0px 36px 160px",
+                      textDecoration: "auto",
+                    }}
+                    // onClick={() => clickEvent(product)}
+                  />
+                   <VisibilityOutlined
+                    style={{
+                      margin: "0px 0px 36px 160px",
+                      textDecoration: "auto",
+                    }}
+                    // onClick={() => clickEvent(product)}
+                  />
+                </PriceDetail>
               </Order>
             ))}
             <Hr />

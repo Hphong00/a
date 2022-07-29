@@ -33,7 +33,7 @@ export default function NewUser() {
 
   const showToast = (checkError) => {
     if (checkError) {
-      toast.error("Đăng ký không thành công", {
+      toast.error("Tài khoản hoặc mật khẩu sai", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

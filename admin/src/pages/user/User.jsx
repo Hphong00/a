@@ -92,7 +92,7 @@ export default function User() {
 
   const showToast = (checkError) => {
     if (checkError) {
-      toast.error("Đăng ký không thành công", {
+      toast.error("Cập nhật thành công", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -104,7 +104,7 @@ export default function User() {
     }
     if (!checkError) {
       // window.location.reload();
-      toast.success("Đăng ký thành công", {
+      toast.success("Cập nhật không thành công", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -193,6 +193,25 @@ export default function User() {
                   className="userUpdateInput"
                 />
               </div>
+              {/* <select name="sex" className="userUpdateItem">
+                <option
+                  name="sex"
+                  value="Giới tính"
+                  onChange={handleChange}
+                  selected
+                >
+                  {user.profile.sex}
+                </option>
+                <option name="sex" value="Nam" onChange={handleChange}>
+                  Nam
+                </option>
+                <option name="sex" value="Nữ" onChange={handleChange}>
+                  Nữ
+                </option>
+                <option name="sex" value="Khác" onChange={handleChange}>
+                  Khác
+                </option>
+              </select> */}
             </div>
             <div className="userUpdateRight">
               <div className="userUpdateUpload">

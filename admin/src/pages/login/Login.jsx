@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   var checkError;
-  // let navigate = useNavigate();
+  //let navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -16,7 +16,6 @@ const Login = () => {
     e.preventDefault();
     login(dispatch, { username, password })
       .catch((e) => {
-        console.log(e);
         if (e.code === "ERR_BAD_REQUEST") {
           checkError = true;
         } else {

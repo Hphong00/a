@@ -15,7 +15,7 @@ const OrderSchema = new mongoose.Schema({
     }, ],
     amount: { type: Number},
     address: { type: Object},
-    status: { type: String},
+    status: { type: String, default: "Chờ xác nhận"},
 }, { timestamps: true });
 
 module.exports = mongoose.model("Order", OrderSchema);

@@ -47,8 +47,8 @@ export default function OrderList() {
       width: 200,
     },
     {
-      field: "updatedAt",
-      headerName: "Cập nhật gần nhất",
+      field: "status",
+      headerName: "Trạng thái",
       width: 200,
     },
     {

@@ -14,10 +14,25 @@ export default function Product() {
   const location = useLocation();
   const productId = location.pathname.split("/")[2];
   const [pStats, setPStats] = useState([]);
+  const [cat, setCat] = useState([]);
+  const [color, setColor] = useState([]);
+  const [memory, setMemory] = useState([]);
 
   const product = useSelector((state) =>
     state.product.products.find((product) => product._id === productId)
   );
+
+  const handleCat = (e) => {
+    setCat(e.target.value.split(","));
+  };
+
+  const handleColor = (e) => {
+    setColor(e.target.value.split(","));
+  };
+
+  const handleMemory = (e) => {
+    setMemory(e.target.value.split(","));
+  };
 
   const [inputs, setInputs] = useState({});
   const dispatch = useDispatch();
@@ -28,7 +43,12 @@ export default function Product() {
   };
   const changeProduct = (e) => {
     e.preventDefault();
-    const product = {...inputs };
+    const product = {
+      ...inputs,
+      categories: cat,
+      color: color,
+      memory: memory,
+    };
     updateProduct(productId, product, dispatch);
     toast.success("Cập nhật thành công", {
       position: "top-right",
@@ -202,6 +222,28 @@ export default function Product() {
               name="trongluong"
               onChange={handleChange}
               placeholder={product.trongluong}
+            />
+          </div>
+          <div className="productFormLeft">
+            <label>Color</label>
+            <input
+              type="text"
+              placeholder={product.color}
+              onChange={handleColor}
+            />
+
+            <label>Categories</label>
+            <input
+              type="text"
+              placeholder={product.categories}
+              onChange={handleCat}
+            />
+
+            <label>Memory</label>
+            <input
+              type="text"
+              placeholder={product.memory}
+              onChange={handleMemory}
             />
           </div>
           <div className="productFormRight">

@@ -17,6 +17,8 @@ export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState([]);
+  const [color, setColor] = useState([]);
+  const [memory, setMemory] = useState([]);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -28,9 +30,17 @@ export default function NewProduct() {
     setCat(e.target.value.split(","));
   };
 
+  const handleColor = (e) => {
+    setColor(e.target.value.split(","));
+  };
+
+  const handleMemory = (e) => {
+    setMemory(e.target.value.split(","));
+  };
+
   const handleClick = (e) => {
     e.preventDefault();
-    if(!file){
+    if (!file) {
       checkError = true;
       showToast(checkError);
     }
@@ -60,17 +70,24 @@ export default function NewProduct() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat };
-          addProduct(product, dispatch).catch((e)=>{
-            if (e.code === "ERR_BAD_RESPONSE") {
-              checkError = true;
-            } else {
-              checkError = false;
-            }
-          })
-          .finally(() => {
-            showToast(checkError);
-          });
+          const product = {
+            ...inputs,
+            img: downloadURL,
+            categories: cat,
+            color: color,
+            memory: memory,
+          };
+          addProduct(product, dispatch)
+            .catch((e) => {
+              if (e.code === "ERR_BAD_RESPONSE") {
+                checkError = true;
+              } else {
+                checkError = false;
+              }
+            })
+            .finally(() => {
+              showToast(checkError);
+            });
         });
       }
     );
@@ -98,7 +115,7 @@ export default function NewProduct() {
         draggable: true,
         progress: undefined,
       });
-     }
+    }
   };
 
   return (
@@ -143,15 +160,26 @@ export default function NewProduct() {
         <div className="addProductItem">
           <label>Color</label>
           <input
-            name="color"
             type="text"
             placeholder="bluem, black..."
-            onChange={handleChange}
+            onChange={handleColor}
           />
         </div>
         <div className="addProductItem">
           <label>Categories</label>
-          <input type="text" placeholder="phone, laptop,.." onChange={handleCat} />
+          <input
+            type="text"
+            placeholder="phone, laptop,.."
+            onChange={handleCat}
+          />
+        </div>
+        <div className="addProductItem">
+          <label>Memory</label>
+          <input
+            type="text"
+            placeholder="64G, 128G,..."
+            onChange={handleMemory}
+          />
         </div>
         <button onClick={handleClick} className="addProductButton">
           Create
@@ -159,6 +187,5 @@ export default function NewProduct() {
         <ToastContainer />
       </form>
     </div>
-    
   );
 }
