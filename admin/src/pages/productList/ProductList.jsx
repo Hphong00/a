@@ -1,10 +1,12 @@
 import "./productList.css";
 import { DataGrid } from "@material-ui/data-grid";
-import { DeleteOutline, UpdateOutlined } from "@material-ui/icons";
+import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, getProducts, updateProduct, addProduct } from "../../redux/apiCalls";
+import { deleteProduct, getProducts } from "../../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ProductList() {
   const dispatch = useDispatch();
@@ -16,11 +18,20 @@ export default function ProductList() {
 
   const handleDelete = (id) => {
     deleteProduct(id, dispatch);
+    toast.success("Xóa thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
-  const hanldeUpdate = (id) => {
-    updateProduct(id, dispatch)
-  }
+  // const hanldeUpdate = (id) => {
+  //   updateProduct(id, dispatch)
+  // }
 
   //const handleAdd = () 
 
@@ -29,7 +40,7 @@ export default function ProductList() {
     {
       field: "product",
       headerName: "Product",
-      width: 200,
+      width: 300,
       renderCell: (params) => {
         return (
           <div className="productListItem">
@@ -39,7 +50,7 @@ export default function ProductList() {
         );
       },
     },
-    { field: "inStock", headerName: "Stock", width: 200 },
+    { field: "chip", headerName: "Chip", width: 200 },
     {
       field: "price",
       headerName: "Price",
@@ -59,7 +70,7 @@ export default function ProductList() {
               className="productListDelete"
               onClick={() => handleDelete(params.row._id)}
             />
-            
+             <ToastContainer />
           </>
         );
       },
@@ -73,7 +84,7 @@ export default function ProductList() {
         disableSelectionOnClick
         columns={columns}
         getRowId={(row) => row._id}
-        pageSize={8}
+        pageSize={10}
         checkboxSelection
       />
     </div>

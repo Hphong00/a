@@ -13,45 +13,83 @@ router.post("/register", async (req, res) => {
       process.env.PASS_SEC
     ).toString(),
   });
-
   try {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 });
 
 //LOGIN
-
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    !user && res.status(401).json("Wrong credentials!");
-
+    if (!user) {
+      return res.status(401).json("Wrong credentials!");
+    }
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.PASS_SEC
     );
     const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-    OriginalPassword !== req.body.password &&
-      res.status(401).json("Wrong credentials!");
-
+    if (OriginalPassword !== req.body.password) {
+      return res.status(401).json("Wrong credentials!");
+    }
     const accessToken = jwt.sign(
       {
         id: user._id,
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SEC,
-      {expiresIn:"3d"}
+      { expiresIn: "3d" }
     );
 
     const { password, ...others } = user._doc;
 
-    res.status(200).json({...others, accessToken});
+    res.status(200).json({ ...others, accessToken });
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
+  }
+});
+
+router.put("/change-password", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+    if (!user) {
+      return res.status(401).json("Wrong credentials!");
+    }
+    const hashedPassword = CryptoJS.AES.decrypt(
+      user.password,
+      process.env.PASS_SEC
+    );
+    const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+
+    if (OriginalPassword !== req.body.password) {
+      return res.status(401).json("Wrong credentials!");
+    }
+    (req.body.newPassword = CryptoJS.AES.encrypt(
+      req.body.newPassword,
+      process.env.PASS_SEC
+    ).toString()),
+      {
+        $set: { password: req.body.newPassword },
+      };
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.JWT_SEC,
+      { expiresIn: "3d" }
+    );
+
+    console.log(req.body.newPassword);
+    const { password, ...others } = user._doc;
+    res.status(200).json({ ...others, accessToken });
+  } catch (err) {
+    return res.status(500).json(err);
   }
 });
 

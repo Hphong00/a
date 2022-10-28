@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div`
   width: 100vw;
@@ -54,17 +56,52 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  var checkError;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
-  //const { isFetching, error } = useSelector((state) => state.user)
 
   const handleClick = async (e) => {
     e.preventDefault();
-    register(dispatch, { username, email, password });
+    register(dispatch, { username, email, password }).catch((e)=>{
+      console.log(e);
+      if (e.code === "ERR_BAD_RESPONSE") {
+        checkError = true;
+      } else {
+        checkError = false;
+      }
+    })
+    .finally(() => {
+      showToast(checkError);
+    });
   };
 
+  const showToast = (checkError) => {
+    if (checkError) {
+      toast.error("Đăng ký không thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    if (!checkError) {
+      toast.success("Đăng ký thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+  
   return (
     <Container>
       <Wrapper>
@@ -95,7 +132,6 @@ const Register = () => {
           />
 
           <Input type="password" placeholder="confirm password" />
-
           <Agreement>
             By clicking Sign Up, you agree to our Terms, Data Policy and Cookie
             Policy. You may receive SMS notifications from us and can opt out at
@@ -105,6 +141,7 @@ const Register = () => {
             Register
           </Button>
         </Form>
+        <ToastContainer />
       </Wrapper>
     </Container>
   );

@@ -11,7 +11,6 @@ const Container = styled.div`
 `;
 
 const Products_Apple = ({ cat, filters, sort }) => {
-  console.log(cat, filters, sort);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 

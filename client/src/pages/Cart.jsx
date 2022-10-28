@@ -1,4 +1,5 @@
-// import { Add, Remove } from "@material-ui/icons";
+import { Clear } from "@material-ui/icons";
+import { DeleteForever } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Bang from "../components/Bang";
@@ -10,7 +11,11 @@ import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { remove, removeProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 // import { product } from "../redux/apiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const KEY =
   "pk_test_51LCNWkBP1LwCA3styoj0vz1MpPtdDsiNixixSrRdD99Ze69uLPFw6l8OWDvpkfvWPuZyyk8ZtxyXFv1WVrvF4ODt006EhGHFjw";
@@ -54,6 +59,10 @@ const TopText = styled.span`
   cursor: pointer;
   margin: 0px 10px;
   border-radius: 6px;
+`;
+const deleteCart = styled.span`
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 const Bottom = styled.div`
@@ -165,28 +174,25 @@ const Button = styled.button`
   color: white;
   font-weight: 600;
 `;
-
+const iconDelete = styled.div`
+  margin: 10px;
+`;
 const Cart = () => {
-  // const handleQuantity = (type) => {
-  //   if (type === "dec") {
-  //     quantity > 1 && setQuantity(quantity - 1);
-  //   } else {
-  //     setQuantity(quantity + 1);
-  //   }
-  // };
-
-  // trừ đi số lượng sản phẩm
-  // const [amount, setAmount] = useState("")
+  //trừ đi số lượng sản phẩm
+  // const [numberofproducts, setNumberofproducts] = useState("")
   // const dispatch = useDispatch()
   // const handleClick = async (e) =>{
   //   e.preventDefault();
-  //   product(dispatch, {amount})
+  //   product(dispatch, {numberofproducts})
   // }
 
+  //const curu = useSelector((state) => state);
   const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user);
+  const [cartedit, setcartedit] = useState(cart);
   const [stripeToken, setStripeToken] = useState(null);
-  // const [quantity, setQuantity] = useState(1);
   let navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onToken = (token) => {
     setStripeToken(token);
@@ -207,6 +213,51 @@ const Cart = () => {
     stripeToken && makeRequest();
   }, [stripeToken, cart.total, navigate]);
 
+  // xóa sản phẩm đi
+  const clickEvent = (product) => {
+    dispatch(removeProduct(product));
+    window.location.reload();
+    // toast.success('Xóa sản phẩm thành công', {
+    //   position: "top-right",
+    //   autoClose: 5000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   });
+  };
+  const deleteAll = () => {
+    dispatch(remove(cart));
+    window.location.reload();
+  };
+
+  const clickPay = () => {
+    if (user.currentUser == null) {
+      toast.error('Đăng nhập trước khi thanh toán. ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+      //navigate("/login")
+    }
+    if (cart.products == null) {
+      alert("Thêm hàng trước khi thanh toán")
+      toast.error('Giỏ hàng chưa có hàng', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }
+  };
   return (
     <Container>
       <Navbar />
@@ -223,11 +274,12 @@ const Cart = () => {
             <TopText>Giỏ hàng(2)</TopText>
             <TopText>Sản phẩm mới(3)</TopText>
           </TopTexts>
+          <DeleteForever onClick={() => deleteAll(cart)} />
           <TopButton type="filled">THANH TOÁN</TopButton>
         </Top>
         <Bottom>
           <Info>
-            {cart.products.map((product) => (
+            {cartedit.products.map((product) => (
               <Product>
                 <ProductDetail>
                   <Image src={product.img} />
@@ -251,6 +303,13 @@ const Cart = () => {
                   </Details>
                 </ProductDetail>
                 <PriceDetail>
+                  <Clear
+                    style={{
+                      margin: "0px 0px 36px 160px",
+                      textDecoration: "auto",
+                    }}
+                    onClick={() => clickEvent(product)}
+                  />
                   <ProductAmountContainer>
                     <ProductAmount>{product.quantity}</ProductAmount>
                   </ProductAmountContainer>
@@ -289,7 +348,15 @@ const Cart = () => {
               token={onToken}
               stripeKey={KEY}
             >
-              <Button /*onClick={handleClick}*/>Thanh toán luôn</Button>
+              <Button
+                style={{ borderRadius: "6px" }}
+                onClick={
+                  clickPay
+                } /*onClick={handleClick} onClick={clickEvent}*/
+              >
+                Thanh toán luôn
+              </Button>
+              <ToastContainer />
             </StripeCheckout>
           </Summary>
         </Bottom>

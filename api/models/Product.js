@@ -14,7 +14,7 @@ const ProductSchema = new mongoose.Schema({
         type: String,
     },
     // số lượng sản phẩm
-    amount: {
+    numberofproducts: {
         type: Number
     },
     categories: {

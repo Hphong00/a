@@ -88,8 +88,8 @@ const Footer = () => {
       <Left>
         <Title>SmartP.com</Title>
         <List>
-          <ListItem>Giới thiệu về công ty</ListItem>
-          <ListItem>Câu hỏi thường gặp mua hàng</ListItem>
+          <ListItem>Giới thiệu</ListItem>
+          <ListItem>Câu hỏi thường gặp</ListItem>
           <ListItem>Chính sách bảo mật</ListItem>
           <ListItem>Hệ thống cửa hàng</ListItem>
           <ListItem>Tra cứu thông tin bảo hành</ListItem>

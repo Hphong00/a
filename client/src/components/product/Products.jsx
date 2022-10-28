@@ -11,11 +11,10 @@ const Container = styled.div`
 `;
 
 const Products = ({ cat, filters, sort }) => {
-  console.log(cat, filters, sort);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  // hiên thị theo danh mục sản phẩm mà theo thứ tự
+  //hiên thị theo danh mục sản phẩm mà theo thứ tự
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -29,6 +28,8 @@ const Products = ({ cat, filters, sort }) => {
     };
     getProducts();
   }, [cat]);
+  // const cat = location.pathname.split("/")[2];
+  // console.log(cat);
 
   useEffect(() => {
     cat &&

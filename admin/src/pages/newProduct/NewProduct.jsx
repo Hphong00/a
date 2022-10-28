@@ -9,11 +9,16 @@ import {
 import app from "../../firebase";
 import { addProduct } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function NewProduct() {
+  var checkError;
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState([]);
+  const [color, setColor] = useState([]);
+  const [memory, setMemory] = useState([]);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -25,22 +30,27 @@ export default function NewProduct() {
     setCat(e.target.value.split(","));
   };
 
+  const handleColor = (e) => {
+    setColor(e.target.value.split(","));
+  };
+
+  const handleMemory = (e) => {
+    setMemory(e.target.value.split(","));
+  };
+
   const handleClick = (e) => {
     e.preventDefault();
+    if (!file) {
+      checkError = true;
+      showToast(checkError);
+    }
     const fileName = new Date().getTime() + file.name;
     const storage = getStorage(app);
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
@@ -55,17 +65,57 @@ export default function NewProduct() {
         }
       },
       (error) => {
-        // Handle unsuccessful uploads
+        checkError = true;
+        showToast(checkError);
       },
       () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat };
-          addProduct(product, dispatch);
+          const product = {
+            ...inputs,
+            img: downloadURL,
+            categories: cat,
+            color: color,
+            memory: memory,
+          };
+          addProduct(product, dispatch)
+            .catch((e) => {
+              if (e.code === "ERR_BAD_RESPONSE") {
+                checkError = true;
+              } else {
+                checkError = false;
+              }
+            })
+            .finally(() => {
+              showToast(checkError);
+            });
         });
       }
     );
+  };
+
+  const showToast = (checkError) => {
+    if (checkError) {
+      toast.error("Tạo sản phẩm không thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    if (!checkError) {
+      toast.success("Tạo sản phẩm thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   return (
@@ -85,7 +135,7 @@ export default function NewProduct() {
           <input
             name="title"
             type="text"
-            placeholder=""
+            placeholder="title..."
             onChange={handleChange}
           />
         </div>
@@ -108,19 +158,33 @@ export default function NewProduct() {
           />
         </div>
         <div className="addProductItem">
-          <label>Categories</label>
-          <input type="text" placeholder="phone, laptop,.." onChange={handleCat} />
+          <label>Color</label>
+          <input
+            type="text"
+            placeholder="bluem, black..."
+            onChange={handleColor}
+          />
         </div>
         <div className="addProductItem">
-          <label>Stock</label>
-          <select name="inStock" onChange={handleChange}>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
+          <label>Categories</label>
+          <input
+            type="text"
+            placeholder="phone, laptop,.."
+            onChange={handleCat}
+          />
+        </div>
+        <div className="addProductItem">
+          <label>Memory</label>
+          <input
+            type="text"
+            placeholder="64G, 128G,..."
+            onChange={handleMemory}
+          />
         </div>
         <button onClick={handleClick} className="addProductButton">
           Create
         </button>
+        <ToastContainer />
       </form>
     </div>
   );
